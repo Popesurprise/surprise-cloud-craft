@@ -48,14 +48,14 @@ const Contact = () => {
     {
       icon: <Mail className="h-5 w-5" />,
       label: "Email",
-      value: "surprise@example.com",
-      href: "mailto:surprise@example.com"
+      value: "popesurprise@gmail.com",
+      href: "mailto:popesurprise@gmail.com"
     },
     {
       icon: <Phone className="h-5 w-5" />,
       label: "Phone",
-      value: "+234 XXX XXX XXXX",
-      href: "tel:+234XXXXXXXXX"
+      value: "09038834820 | +14849199407",
+      href: "tel:+14849199407"
     },
     {
       icon: <MapPin className="h-5 w-5" />,
@@ -69,13 +69,13 @@ const Contact = () => {
     {
       icon: <Github className="h-6 w-6" />,
       label: "GitHub",
-      href: "https://github.com",
+      href: "https://github.com/Popesurprise",
       color: "hover:text-foreground"
     },
     {
       icon: <Linkedin className="h-6 w-6" />,
       label: "LinkedIn",
-      href: "https://linkedin.com",
+      href: "http://www.linkedin.com/in/surprisepopoola",
       color: "hover:text-tech-blue"
     }
   ];

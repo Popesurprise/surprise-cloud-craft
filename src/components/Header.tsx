@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Github, Linkedin, Mail } from "lucide-react";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +28,7 @@ const Header = () => {
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="font-bold text-2xl text-primary">
-            Surprise Popoola
+            Surprise POPOOLA
           </div>
 
           {/* Desktop Navigation */}
@@ -43,17 +44,24 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Social Links */}
+          {/* Social Links & Theme Toggle */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm">
-              <Github className="h-5 w-5" />
+            <Button variant="ghost" size="sm" asChild>
+              <a href="https://github.com/Popesurprise" target="_blank" rel="noopener noreferrer">
+                <Github className="h-5 w-5" />
+              </a>
             </Button>
-            <Button variant="ghost" size="sm">
-              <Linkedin className="h-5 w-5" />
+            <Button variant="ghost" size="sm" asChild>
+              <a href="http://www.linkedin.com/in/surprisepopoola" target="_blank" rel="noopener noreferrer">
+                <Linkedin className="h-5 w-5" />
+              </a>
             </Button>
-            <Button variant="ghost" size="sm">
-              <Mail className="h-5 w-5" />
+            <Button variant="ghost" size="sm" asChild>
+              <a href="mailto:popesurprise@gmail.com">
+                <Mail className="h-5 w-5" />
+              </a>
             </Button>
+            <ThemeToggle />
           </div>
 
           {/* Mobile Menu Button */}
@@ -81,15 +89,22 @@ const Header = () => {
                 </button>
               ))}
               <div className="flex items-center space-x-4 pt-4">
-                <Button variant="ghost" size="sm">
-                  <Github className="h-5 w-5" />
+                <Button variant="ghost" size="sm" asChild>
+                  <a href="https://github.com/Popesurprise" target="_blank" rel="noopener noreferrer">
+                    <Github className="h-5 w-5" />
+                  </a>
                 </Button>
-                <Button variant="ghost" size="sm">
-                  <Linkedin className="h-5 w-5" />
+                <Button variant="ghost" size="sm" asChild>
+                  <a href="http://www.linkedin.com/in/surprisepopoola" target="_blank" rel="noopener noreferrer">
+                    <Linkedin className="h-5 w-5" />
+                  </a>
                 </Button>
-                <Button variant="ghost" size="sm">
-                  <Mail className="h-5 w-5" />
+                <Button variant="ghost" size="sm" asChild>
+                  <a href="mailto:popesurprise@gmail.com">
+                    <Mail className="h-5 w-5" />
+                  </a>
                 </Button>
+                <ThemeToggle />
               </div>
             </div>
           </nav>
