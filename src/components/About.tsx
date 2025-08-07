@@ -37,23 +37,13 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div className="space-y-6">
             <p className="text-lg text-foreground leading-relaxed">
-              As a DevOps Engineer and Cloud Architect, I specialize in creating reusable 
-              infrastructures and maturing CI/CD pipelines that ensure high availability 
-              and security. My expertise spans across AWS cloud services, containerization 
-              with Docker and Kubernetes, and automation tools that streamline development workflows.
+              As a seasoned DevOps Engineer and Cloud Architect, I bring extensive expertise in designing and managing robust, scalable infrastructures across multiple cloud platforms including AWS, Azure, and Google Cloud. My skills encompass advanced CI/CD pipeline development, container orchestration with Kubernetes and Docker, and infrastructure-as-code using tools like Terraform and CloudFormation. I excel in automating deployment processes, enhancing system reliability, and enforcing security best practices in complex environments.
             </p>
-            
             <p className="text-lg text-foreground leading-relaxed">
-              I'm passionate about building scalable, secure systems using modern technologies 
-              like AWS API Gateway, Lambda, S3, DynamoDB, and implementing robust security 
-              practices with AWS Secrets Manager, KMS, and RBAC. My commitment to automation 
-              and infrastructure-as-code helps teams deliver software faster and more reliably.
+              I am proficient in leveraging cloud-native services such as AWS Lambda, Azure Functions, Google Cloud Run, alongside API gateways, managed databases, and secret management systems to build high-availability, secure, and cost-optimized solutions. My strong focus on automation, monitoring, and compliance ensures efficient software delivery and operational excellence.
             </p>
-
             <p className="text-lg text-foreground leading-relaxed">
-              Beyond technical expertise, I'm actively involved in the Herald Ministries Tech 
-              Community, where I mentor emerging developers and share knowledge about cloud 
-              technologies and DevOps best practices.
+              Beyond technical roles, I actively contribute to tech communities by mentoring developers and promoting cloud and DevOps knowledge sharing, fostering innovation and collaboration.
             </p>
           </div>
 
@@ -101,8 +91,7 @@ const About = () => {
                   <h3 className="text-xl font-semibold">Community</h3>
                 </div>
                 <p className="text-foreground">
-                  Active member of Herald Ministries Tech Community, providing 
-                  mentorship and sharing DevOps best practices with emerging developers.
+                  Active member of Herald Ministries Tech Community, providing mentorship and sharing DevOps best practices with emerging developers.
                 </p>
               </CardContent>
             </Card>
