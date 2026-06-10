@@ -1,145 +1,157 @@
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { Github, ExternalLink, Star, GitFork, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { ExternalLink, Github, ArrowRight } from "lucide-react";
-import cloudArchitecture from "@/assets/cloud-architecture.jpg";
-import devopsPipeline from "@/assets/devops-pipeline.jpg";
+
+type Repo = {
+  id: number;
+  name: string;
+  description: string | null;
+  html_url: string;
+  homepage: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  language: string | null;
+  updated_at: string;
+  topics?: string[];
+};
+
+const featured = [
+  {
+    name: "Zero Downtime Banking Platform",
+    description: "Highly-available banking infrastructure with blue/green deployments, automated rollback and observability.",
+    tech: ["Kubernetes", "Terraform", "Jenkins", "Prometheus", "Grafana", "Docker"],
+  },
+  {
+    name: "KubeOps Platform",
+    description: "Internal Kubernetes platform with GitOps delivery, secret management and pre-baked golden images.",
+    tech: ["Kubernetes", "Docker", "ArgoCD", "Helm"],
+  },
+  {
+    name: "Serverless AWS Suite",
+    description: "Production serverless services on AWS — APIs, auth, and event-driven processing.",
+    tech: ["Lambda", "DynamoDB", "API Gateway", "Cognito"],
+  },
+  {
+    name: "Cloud Infrastructure Automation",
+    description: "Reusable Terraform modules and pipelines provisioning multi-account AWS infrastructure.",
+    tech: ["Terraform", "AWS", "GitHub Actions"],
+  },
+];
 
 const Projects = () => {
-  const projects = [
-    {
-      title: "Cloud-Native DevOps Pipeline",
-      year: "2025",
-      description: "Containerized Ruby on Rails application with PostgreSQL using Docker, deployed via Kubernetes with StatefulSets for persistent storage. Implemented GitOps with ArgoCD and Tekton pipelines for automated CI/CD.",
-      image: devopsPipeline,
-      technologies: ["Docker", "Kubernetes", "ArgoCD", "Tekton", "Ruby on Rails", "PostgreSQL"],
-      achievements: ["End-to-end automation", "Zero-downtime deployments", "Secure container orchestration"],
-      type: "real"
-    },
-    {
-      title: "Serverless E-Commerce Platform",
-      year: "2024",
-      description: "Built a fully serverless platform with DynamoDB, API Gateway, Lambda, and Cognito for secure authentication and transactions, optimizing costs with AWS's pay-as-you-go model.",
-      image: cloudArchitecture,
-      technologies: ["AWS Lambda", "DynamoDB", "API Gateway", "Cognito", "S3"],
-      achievements: ["40% cost reduction", "99.9% uptime", "Scalable architecture"],
-      type: "real"
-    },
-    {
-      title: "Secure File-Sharing Platform",
-      year: "2024",
-      description: "Developed a system using S3, Lambda, and API Gateway with robust RBAC and encryption, improving file retrieval times by 40%.",
-      image: cloudArchitecture,
-      technologies: ["AWS S3", "Lambda", "API Gateway", "KMS", "IAM"],
-      achievements: ["40% faster retrieval", "Military-grade encryption", "RBAC implementation"],
-      type: "real"
-    },
-    {
-      title: "Monitoring & Alerting System",
-      year: "2024",
-      description: "Comprehensive monitoring solution using Prometheus, Grafana, and CloudWatch to monitor Kubernetes clusters with automated alerts for performance issues.",
-      image: devopsPipeline,
-      technologies: ["Prometheus", "Grafana", "CloudWatch", "Kubernetes", "Alertmanager"],
-      achievements: ["30% reduced downtime", "Real-time monitoring", "Automated incident response"],
-      type: "creative"
-    },
-    {
-      title: "Multi-Cloud Disaster Recovery",
-      year: "2024",
-      description: "Implemented disaster recovery solution across AWS and Azure with automated failover and backup strategies using Terraform for infrastructure-as-code.",
-      image: cloudArchitecture,
-      technologies: ["Terraform", "AWS", "Azure", "Ansible", "Bash"],
-      achievements: ["99.99% availability", "15-minute RTO", "Cross-cloud redundancy"],
-      type: "creative"
-    },
-    {
-      title: "Automated AWS Backup System",
-      year: "2023",
-      description: "Created Bash scripts for secure, scheduled backups to S3, enhancing data safety and operational efficiency with lifecycle policies.",
-      image: cloudArchitecture,
-      technologies: ["Bash", "AWS S3", "CloudWatch", "IAM", "Lambda"],
-      achievements: ["Automated scheduling", "Cost optimization", "Data integrity"],
-      type: "real"
-    }
-  ];
+  const [repos, setRepos] = useState<Repo[] | null>(null);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    fetch("https://api.github.com/users/Popesurprise/repos?sort=updated&per_page=8")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data: Repo[]) => setRepos(data.filter((r) => !r.name.includes(".github"))))
+      .catch(() => setError(true));
+  }, []);
 
   return (
-    <section id="projects" className="py-20 bg-secondary/20">
+    <section id="projects" className="section-pad bg-secondary/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Featured Projects
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <p className="font-mono text-primary text-sm mb-3">// projects.json</p>
+          <h2 className="text-3xl md:text-5xl font-bold">
+            Featured <span className="gradient-text">Projects</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Showcasing my expertise in DevOps, cloud architecture, and automation
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+            Selected DevOps, cloud and platform work — plus live data from my GitHub.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <Card key={index} className="hover-lift overflow-hidden">
-              <div className="relative">
-                <img 
-                  src={project.image} 
-                  alt={project.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-4 right-4">
-                  <Badge variant={project.type === "real" ? "default" : "secondary"}>
-                    {project.year}
-                  </Badge>
-                </div>
+        {/* Featured handcrafted */}
+        <div className="grid md:grid-cols-2 gap-5 mb-14">
+          {featured.map((p, i) => (
+            <motion.div
+              key={p.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="hover-lift rounded-xl gradient-border p-6"
+            >
+              <h3 className="text-lg font-bold mb-2">{p.name}</h3>
+              <p className="text-sm text-muted-foreground mb-4">{p.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {p.tech.map((t) => (
+                  <span key={t} className="px-2.5 py-1 rounded text-[11px] font-mono bg-primary/10 text-primary border border-primary/20">
+                    {t}
+                  </span>
+                ))}
               </div>
-              
-              <CardHeader>
-                <CardTitle className="text-xl font-bold text-foreground">
-                  {project.title}
-                </CardTitle>
-              </CardHeader>
-              
-              <CardContent className="space-y-4">
-                <p className="text-muted-foreground text-sm leading-relaxed">
-                  {project.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.slice(0, 4).map((tech, techIndex) => (
-                    <Badge key={techIndex} variant="outline" className="text-xs">
-                      {tech}
-                    </Badge>
-                  ))}
-                  {project.technologies.length > 4 && (
-                    <Badge variant="outline" className="text-xs">
-                      +{project.technologies.length - 4} more
-                    </Badge>
-                  )}
-                </div>
-                
-                <div className="space-y-2">
-                  <h4 className="font-semibold text-sm text-foreground">Key Achievements:</h4>
-                  <ul className="space-y-1">
-                    {project.achievements.map((achievement, achIndex) => (
-                      <li key={achIndex} className="text-xs text-muted-foreground flex items-center">
-                        <ArrowRight className="h-3 w-3 mr-2 text-success" />
-                        {achievement}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div className="flex gap-3 pt-4">
-                  <Button size="sm" variant="outline" className="flex-1">
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    View Details
-                  </Button>
-                  <Button size="sm" variant="ghost">
-                    <Github className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            </motion.div>
           ))}
         </div>
+
+        {/* GitHub live repos */}
+        <div className="mb-6 flex items-center justify-between">
+          <h3 className="font-mono text-sm text-muted-foreground">$ git log --recent</h3>
+          <Button variant="outline" size="sm" asChild>
+            <a href="https://github.com/Popesurprise" target="_blank" rel="noopener noreferrer">
+              <Github className="h-4 w-4 mr-2" /> All Repositories
+            </a>
+          </Button>
+        </div>
+
+        {error && (
+          <p className="text-sm text-muted-foreground font-mono">// could not load GitHub repos right now</p>
+        )}
+
+        {!repos && !error && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-44 rounded-xl border border-border bg-card animate-pulse" />
+            ))}
+          </div>
+        )}
+
+        {repos && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {repos.slice(0, 6).map((r, i) => (
+              <motion.a
+                key={r.id}
+                href={r.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="hover-lift rounded-xl border border-border bg-card p-5 block group"
+              >
+                <div className="flex items-start justify-between mb-2">
+                  <h4 className="font-semibold text-primary group-hover:underline">{r.name}</h4>
+                  <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                </div>
+                <p className="text-sm text-muted-foreground line-clamp-2 mb-4 min-h-[40px]">
+                  {r.description || "No description provided."}
+                </p>
+                <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
+                  {r.language && (
+                    <span className="flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-primary" />
+                      {r.language}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-1"><Star className="h-3 w-3" /> {r.stargazers_count}</span>
+                  <span className="flex items-center gap-1"><GitFork className="h-3 w-3" /> {r.forks_count}</span>
+                  <span className="flex items-center gap-1 ml-auto">
+                    <Calendar className="h-3 w-3" /> {new Date(r.updated_at).toLocaleDateString()}
+                  </span>
+                </div>
+              </motion.a>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -1,223 +1,126 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
+import { Mail, Phone, Github, Linkedin, MapPin, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Mail, MapPin, Phone, Send, Github, Linkedin } from "lucide-react";
 import { toast } from "sonner";
+import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+
+const schema = z.object({
+  name: z.string().trim().min(1, "Name required").max(100),
+  email: z.string().trim().email("Valid email required").max(255),
+  company: z.string().trim().max(120).optional(),
+  subject: z.string().trim().min(1, "Subject required").max(200),
+  message: z.string().trim().min(5, "Message too short").max(2000),
+});
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: ""
-  });
+  const [form, setForm] = useState({ name: "", email: "", company: "", subject: "", message: "" });
+  const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const onChange = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm((p) => ({ ...p, [k]: e.target.value }));
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.message) {
-      toast.error("Please fill in all required fields");
+    const parsed = schema.safeParse(form);
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Invalid form");
       return;
     }
-
-    // Simulate form submission
-    toast.success("Message sent successfully! I'll get back to you soon.");
-    
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      subject: "",
-      message: ""
-    });
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("send-contact-email", { body: parsed.data });
+      if (error || (data && (data as any).error)) throw new Error(error?.message || (data as any).error);
+      toast.success("Thank you for reaching out. I will get back to you shortly.");
+      setForm({ name: "", email: "", company: "", subject: "", message: "" });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to send message");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const contactInfo = [
-    {
-      icon: <Mail className="h-5 w-5" />,
-      label: "Email",
-      value: "popesurprise@gmail.com",
-      href: "mailto:popesurprise@gmail.com"
-    },
-    {
-      icon: <Phone className="h-5 w-5" />,
-      label: "Phone",
-      value: "09038834820 | +14849199407",
-      href: "tel:+14849199407"
-    },
-    {
-      icon: <MapPin className="h-5 w-5" />,
-      label: "Location",
-      value: "Nigeria",
-      href: null
-    }
-  ];
-
-  const socialLinks = [
-    {
-      icon: <Github className="h-6 w-6" />,
-      label: "GitHub",
-      href: "https://github.com/Popesurprise",
-      color: "hover:text-foreground"
-    },
-    {
-      icon: <Linkedin className="h-6 w-6" />,
-      label: "LinkedIn",
-      href: "http://www.linkedin.com/in/surprisepopoola",
-      color: "hover:text-tech-blue"
-    }
-  ];
-
   return (
-    <section id="contact" className="py-20 bg-secondary/20">
+    <section id="contact" className="section-pad">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Get In Touch
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <p className="font-mono text-primary text-sm mb-3">// contact.sh</p>
+          <h2 className="text-3xl md:text-5xl font-bold">
+            Let's <span className="gradient-text">Build</span> Together
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ready to collaborate on your next project? Let's discuss how I can help 
-            build scalable, secure cloud solutions for your organization.
+          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+            Open to senior DevOps / Cloud / Platform / SRE roles and collaborations.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12">
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-2xl font-bold text-foreground mb-6">
-                Let's Work Together
-              </h3>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                I'm always excited to work on challenging projects that involve cloud 
-                architecture, DevOps automation, and scalable infrastructure. Whether 
-                you need help with AWS migrations, CI/CD pipeline implementation, or 
-                Kubernetes orchestration, I'd love to hear from you.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              {contactInfo.map((info, index) => (
-                <div key={index} className="flex items-center gap-4">
-                  <div className="bg-primary/10 p-3 rounded-lg">
-                    <div className="text-primary">{info.icon}</div>
-                  </div>
-                  <div>
-                    <div className="font-medium text-foreground">{info.label}</div>
-                    {info.href ? (
-                      <a 
-                        href={info.href} 
-                        className="text-muted-foreground hover:text-primary transition-colors"
-                      >
-                        {info.value}
-                      </a>
-                    ) : (
-                      <div className="text-muted-foreground">{info.value}</div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Connect With Me</h4>
-              <div className="flex gap-4">
-                {socialLinks.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`p-3 bg-background rounded-lg border border-border ${social.color} transition-colors hover-lift`}
-                    aria-label={social.label}
-                  >
-                    {social.icon}
-                  </a>
-                ))}
-              </div>
-            </div>
+        <div className="grid lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
+          <div className="lg:col-span-2 space-y-3">
+            <ContactItem icon={Mail} label="Email" value="popesurprise@gmail.com" href="mailto:popesurprise@gmail.com" />
+            <ContactItem icon={Phone} label="Phone (NG)" value="+234 903 883 4820" href="tel:+2349038834820" />
+            <ContactItem icon={Phone} label="Phone (US)" value="+1 484 919 9407" href="tel:+14849199407" />
+            <ContactItem icon={Github} label="GitHub" value="github.com/Popesurprise" href="https://github.com/Popesurprise" />
+            <ContactItem icon={Linkedin} label="LinkedIn" value="linkedin.com/in/surprisepopoola" href="https://www.linkedin.com/in/surprisepopoola" />
+            <ContactItem icon={MapPin} label="Location" value="Lagos, Nigeria · Remote" />
           </div>
 
-          <Card className="hover-lift">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-foreground">
-                Send Message
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Name *</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder="Your full name"
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email *</Label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder="your.email@example.com"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="subject">Subject</Label>
-                  <Input
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    placeholder="Project inquiry, collaboration, etc."
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message *</Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder="Tell me about your project requirements, timeline, and how I can help..."
-                    rows={6}
-                    required
-                  />
-                </div>
-
-                <Button type="submit" size="lg" className="w-full gradient-tech">
-                  Send Message
-                  <Send className="ml-2 h-5 w-5" />
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+          <motion.form
+            onSubmit={onSubmit}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="lg:col-span-3 rounded-xl border border-border bg-card p-6 space-y-4"
+          >
+            <div className="grid sm:grid-cols-2 gap-4">
+              <Field label="Name" id="name" value={form.name} onChange={onChange("name")} required />
+              <Field label="Email" id="email" type="email" value={form.email} onChange={onChange("email")} required />
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <Field label="Company" id="company" value={form.company} onChange={onChange("company")} />
+              <Field label="Subject" id="subject" value={form.subject} onChange={onChange("subject")} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="message">Message</Label>
+              <Textarea id="message" rows={6} value={form.message} onChange={onChange("message")} required maxLength={2000} />
+            </div>
+            <Button type="submit" size="lg" disabled={loading} className="w-full font-mono">
+              {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending…</> : <><Send className="mr-2 h-4 w-4" /> Send Message</>}
+            </Button>
+          </motion.form>
         </div>
       </div>
     </section>
   );
+};
+
+const Field = ({ label, id, type = "text", value, onChange, required, }: any) => (
+  <div className="space-y-2">
+    <Label htmlFor={id}>{label}{required && <span className="text-primary"> *</span>}</Label>
+    <Input id={id} type={type} value={value} onChange={onChange} required={required} />
+  </div>
+);
+
+const ContactItem = ({ icon: Icon, label, value, href }: any) => {
+  const body = (
+    <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover-lift">
+      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+        <Icon className="h-4 w-4 text-primary" />
+      </div>
+      <div className="min-w-0">
+        <p className="text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
+        <p className="font-mono text-sm truncate">{value}</p>
+      </div>
+    </div>
+  );
+  return href ? <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">{body}</a> : body;
 };
 
 export default Contact;
