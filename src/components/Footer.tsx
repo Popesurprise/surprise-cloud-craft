@@ -1,72 +1,35 @@
-import { Heart } from "lucide-react";
+import { Github, Linkedin, Mail, Heart } from "lucide-react";
 
-const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
-  return (
-    <footer className="bg-background border-t border-border py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
-          <div className="space-y-4">
-            <h3 className="text-xl font-bold text-primary">Surprise Popoola</h3>
-            <p className="text-muted-foreground text-sm leading-relaxed">
-              DevOps Engineer and Cloud Architect passionate about building 
-              scalable, secure, and automated cloud solutions that empower 
-              teams to deliver exceptional software.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Quick Links</h4>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <a href="#about" className="text-muted-foreground hover:text-primary transition-colors">
-                About
-              </a>
-              <a href="#projects" className="text-muted-foreground hover:text-primary transition-colors">
-                Projects
-              </a>
-              <a href="#skills" className="text-muted-foreground hover:text-primary transition-colors">
-                Skills
-              </a>
-              <a href="#blog" className="text-muted-foreground hover:text-primary transition-colors">
-                Blog
-              </a>
-              <a href="#contact" className="text-muted-foreground hover:text-primary transition-colors">
-                Contact
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                Resume
-              </a>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h4 className="font-semibold text-foreground">Expertise</h4>
-            <div className="text-sm space-y-1">
-              <div className="text-muted-foreground">AWS Cloud Architecture</div>
-              <div className="text-muted-foreground">Kubernetes & Docker</div>
-              <div className="text-muted-foreground">CI/CD Automation</div>
-              <div className="text-muted-foreground">Infrastructure as Code</div>
-              <div className="text-muted-foreground">Site Reliability Engineering</div>
-            </div>
-          </div>
+const Footer = () => (
+  <footer className="border-t border-border bg-background">
+    <div className="container mx-auto px-4 py-10">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="text-center md:text-left">
+          <p className="font-mono text-sm text-muted-foreground">
+            Built with <Heart className="inline h-3 w-3 text-destructive" /> by{" "}
+            <span className="text-primary font-semibold">Surprise Popoola</span>
+          </p>
+          <p className="font-mono text-xs text-muted-foreground mt-1">
+            Powered by React + TypeScript + TailwindCSS · © {new Date().getFullYear()}
+          </p>
         </div>
-
-        <div className="pt-8 border-t border-border">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <div>
-              © {currentYear} Surprise Popoola. All rights reserved.
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <span>Building technology to serve and innovate</span>
-              <Heart className="h-4 w-4 text-destructive" />
-            </div>
-          </div>
+        <div className="flex gap-3">
+          <a href="https://github.com/Popesurprise" target="_blank" rel="noopener noreferrer"
+             className="w-10 h-10 rounded-lg border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors" aria-label="GitHub">
+            <Github className="h-4 w-4" />
+          </a>
+          <a href="https://www.linkedin.com/in/surprisepopoola" target="_blank" rel="noopener noreferrer"
+             className="w-10 h-10 rounded-lg border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors" aria-label="LinkedIn">
+            <Linkedin className="h-4 w-4" />
+          </a>
+          <a href="mailto:popesurprise@gmail.com"
+             className="w-10 h-10 rounded-lg border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-colors" aria-label="Email">
+            <Mail className="h-4 w-4" />
+          </a>
         </div>
       </div>
-    </footer>
-  );
-};
+    </div>
+  </footer>
+);
 
 export default Footer;

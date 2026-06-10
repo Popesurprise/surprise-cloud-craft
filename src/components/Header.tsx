@@ -1,115 +1,110 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Github, Linkedin, Mail } from "lucide-react";
+import { Menu, X, Github, Linkedin, Mail, Terminal } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
+const nav = [
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
+  { label: "Skills", href: "#skills" },
+  { label: "Projects", href: "#projects" },
+  { label: "Certifications", href: "#certifications" },
+  { label: "Resume", href: "#resume" },
+  { label: "Contact", href: "#contact" },
+];
+
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const navItems = [
-    { label: "Home", href: "#home" },
-    { label: "About", href: "#about" },
-    { label: "Projects", href: "#projects" },
-    { label: "Skills", href: "#skills" },
-    { label: "Blog", href: "#blog" },
-    { label: "Contact", href: "#contact" },
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-    setIsMenuOpen(false);
+  const go = (href: string) => {
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    setOpen(false);
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="font-bold text-2xl text-primary">
-            Surprise POPOOLA
-          </div>
+    <header
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+        scrolled ? "glass shadow-lg" : "bg-transparent"
+      }`}
+    >
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+        <button onClick={() => go("#home")} className="flex items-center gap-2 font-mono font-bold">
+          <Terminal className="h-5 w-5 text-primary" />
+          <span className="gradient-text text-lg">surprise@devops</span>
+          <span className="text-muted-foreground hidden sm:inline">:~$</span>
+        </button>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <button
-                key={item.label}
-                onClick={() => scrollToSection(item.href)}
-                className="text-foreground hover:text-primary transition-colors font-medium"
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
+        <nav className="hidden lg:flex items-center gap-1">
+          {nav.map((n) => (
+            <button
+              key={n.label}
+              onClick={() => go(n.href)}
+              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors story-link"
+            >
+              {n.label}
+            </button>
+          ))}
+        </nav>
 
-          {/* Social Links & Theme Toggle */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="sm" asChild>
-              <a href="https://github.com/Popesurprise" target="_blank" rel="noopener noreferrer">
-                <Github className="h-5 w-5" />
-              </a>
-            </Button>
-            <Button variant="ghost" size="sm" asChild>
-              <a href="http://www.linkedin.com/in/surprisepopoola" target="_blank" rel="noopener noreferrer">
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </Button>
-            <Button variant="ghost" size="sm" asChild>
-              <a href="mailto:popesurprise@gmail.com">
-                <Mail className="h-5 w-5" />
-              </a>
-            </Button>
-            <ThemeToggle />
-          </div>
-
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        <div className="hidden md:flex items-center gap-1">
+          <Button variant="ghost" size="icon" asChild>
+            <a href="https://github.com/Popesurprise" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+              <Github className="h-4 w-4" />
+            </a>
           </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <a href="https://www.linkedin.com/in/surprisepopoola" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <Linkedin className="h-4 w-4" />
+            </a>
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <a href="mailto:popesurprise@gmail.com" aria-label="Email">
+              <Mail className="h-4 w-4" />
+            </a>
+          </Button>
+          <ThemeToggle />
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 border-t border-border pt-4">
-            <div className="flex flex-col space-y-4">
-              {navItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => scrollToSection(item.href)}
-                  className="text-left text-foreground hover:text-primary transition-colors font-medium"
-                >
-                  {item.label}
-                </button>
-              ))}
-              <div className="flex items-center space-x-4 pt-4">
-                <Button variant="ghost" size="sm" asChild>
-                  <a href="https://github.com/Popesurprise" target="_blank" rel="noopener noreferrer">
-                    <Github className="h-5 w-5" />
-                  </a>
-                </Button>
-                <Button variant="ghost" size="sm" asChild>
-                  <a href="http://www.linkedin.com/in/surprisepopoola" target="_blank" rel="noopener noreferrer">
-                    <Linkedin className="h-5 w-5" />
-                  </a>
-                </Button>
-                <Button variant="ghost" size="sm" asChild>
-                  <a href="mailto:popesurprise@gmail.com">
-                    <Mail className="h-5 w-5" />
-                  </a>
-                </Button>
-                <ThemeToggle />
-              </div>
-            </div>
-          </nav>
-        )}
+        <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </Button>
       </div>
+
+      {open && (
+        <nav className="lg:hidden glass border-t border-border">
+          <div className="container mx-auto px-4 py-4 flex flex-col gap-1">
+            {nav.map((n) => (
+              <button
+                key={n.label}
+                onClick={() => go(n.href)}
+                className="text-left px-3 py-2 rounded-md hover:bg-secondary text-foreground"
+              >
+                {n.label}
+              </button>
+            ))}
+            <div className="flex items-center gap-2 pt-2 border-t border-border mt-2">
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://github.com/Popesurprise" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><Github className="h-4 w-4" /></a>
+              </Button>
+              <Button variant="ghost" size="icon" asChild>
+                <a href="https://www.linkedin.com/in/surprisepopoola" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><Linkedin className="h-4 w-4" /></a>
+              </Button>
+              <Button variant="ghost" size="icon" asChild>
+                <a href="mailto:popesurprise@gmail.com" aria-label="Email"><Mail className="h-4 w-4" /></a>
+              </Button>
+              <ThemeToggle />
+            </div>
+          </div>
+        </nav>
+      )}
     </header>
   );
 };

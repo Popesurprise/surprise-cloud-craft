@@ -1,24 +1,32 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import About from "@/components/About";
-import Projects from "@/components/Projects";
+import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
-import Blog from "@/components/Blog";
-import Testimonials from "@/components/Testimonials";
+import Projects from "@/components/Projects";
+import GitHubActivity from "@/components/GitHubActivity";
+import Certifications from "@/components/Certifications";
+import Resume from "@/components/Resume";
+import InteractiveTerminal from "@/components/InteractiveTerminal";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground antialiased">
       <Header />
-      <Hero />
-      <About />
-      <Projects />
-      <Skills />
-      <Blog />
-      <Testimonials />
-      <Contact />
+      <main>
+        <Hero />
+        <About />
+        <Experience />
+        <Skills />
+        <Projects />
+        <GitHubActivity />
+        <Certifications />
+        <Resume />
+        <InteractiveTerminal />
+        <Contact />
+      </main>
       <Footer />
     </div>
   );
