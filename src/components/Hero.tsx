@@ -6,10 +6,10 @@ import surpriseHeadshot from "@/assets/surprise2.png";
 
 const Hero = () => {
   return (
-    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28">
+    <section className="relative pt-32 pb-20 md:pt-40 md:pb-28 overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-20 pointer-events-none" />
-      <div className="container mx-auto px-4 relative">
-        <div className="grid lg:grid-cols-5 gap-12 items-center">
+      <div className="container mx-auto px-6 md:px-12 xl:px-16 relative">
+        <div className="grid lg:grid-cols-5 gap-8 xl:gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -58,7 +58,7 @@ const Hero = () => {
             <div className="relative">
               <div className="absolute -inset-2 rounded-2xl bg-gradient-to-br from-primary/30 via-accent/20 to-aws-orange/20 blur-2xl"
                    style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.3), hsl(var(--accent) / 0.2), hsl(var(--aws-orange) / 0.2))" }} />
-              <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden border border-border shadow-2xl">
+              <div className="relative w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-2xl overflow-hidden border border-border shadow-2xl">
                 <img
                   src={surpriseHeadshot}
                   alt="Surprise Popoola — DevOps Engineer"
