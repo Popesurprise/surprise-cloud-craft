@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Download, Mail, Github } from "lucide-react";
-import surpriseHeadshot from "@/assets/surprise-headshot.jpg";
+import surpriseHeadshot from "@/assets/d701e07e-5582-4143-8060-bfb5aebcc2c3.png";
 
 const lines = [
   { prompt: "$ whoami", out: "Surprise Popoola" },
