@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Github, Linkedin, Mail, Terminal } from "lucide-react";
+import { Menu, X, Github, Linkedin, Mail } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 const nav = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Skills", href: "#skills" },
-  { label: "Projects", href: "#projects" },
-  { label: "Certifications", href: "#certifications" },
-  { label: "Resume", href: "#resume" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", to: "/" },
+  { label: "About", to: "/about" },
+  { label: "Projects", to: "/projects" },
+  { label: "Experience", to: "/experience" },
+  { label: "Contact", to: "/contact" },
 ];
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -24,33 +23,35 @@ const Header = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const go = (href: string) => {
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-    setOpen(false);
-  };
+  useEffect(() => setOpen(false), [location.pathname]);
 
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass shadow-lg" : "bg-transparent"
+        scrolled ? "glass shadow-sm" : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <button onClick={() => go("#home")} className="flex items-center gap-2 font-mono font-bold">
-          <Terminal className="h-5 w-5 text-primary" />
-          <span className="gradient-text text-lg">surprise@devops</span>
-          <span className="text-muted-foreground hidden sm:inline">:~$</span>
-        </button>
+      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <Link to="/" className="font-bold text-lg tracking-tight">
+          Surprise <span className="gradient-text">Popoola</span>
+        </Link>
 
         <nav className="hidden lg:flex items-center gap-1">
           {nav.map((n) => (
-            <button
+            <NavLink
               key={n.label}
-              onClick={() => go(n.href)}
-              className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors story-link"
+              to={n.to}
+              end={n.to === "/"}
+              className={({ isActive }) =>
+                `px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                  isActive
+                    ? "text-primary"
+                    : "text-muted-foreground hover:text-foreground"
+                }`
+              }
             >
               {n.label}
-            </button>
+            </NavLink>
           ))}
         </nav>
 
@@ -82,13 +83,18 @@ const Header = () => {
         <nav className="lg:hidden glass border-t border-border">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-1">
             {nav.map((n) => (
-              <button
+              <NavLink
                 key={n.label}
-                onClick={() => go(n.href)}
-                className="text-left px-3 py-2 rounded-md hover:bg-secondary text-foreground"
+                to={n.to}
+                end={n.to === "/"}
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md text-sm ${
+                    isActive ? "bg-secondary text-primary" : "text-foreground hover:bg-secondary"
+                  }`
+                }
               >
                 {n.label}
-              </button>
+              </NavLink>
             ))}
             <div className="flex items-center gap-2 pt-2 border-t border-border mt-2">
               <Button variant="ghost" size="icon" asChild>

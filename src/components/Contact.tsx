@@ -12,13 +12,12 @@ import { supabase } from "@/integrations/supabase/client";
 const schema = z.object({
   name: z.string().trim().min(1, "Name required").max(100),
   email: z.string().trim().email("Valid email required").max(255),
-  company: z.string().trim().max(120).optional(),
   subject: z.string().trim().min(1, "Subject required").max(200),
   message: z.string().trim().min(5, "Message too short").max(2000),
 });
 
-const Contact = () => {
-  const [form, setForm] = useState({ name: "", email: "", company: "", subject: "", message: "" });
+const Contact = ({ withHeader = true }: { withHeader?: boolean }) => {
+  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
 
   const onChange = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -36,7 +35,7 @@ const Contact = () => {
       const { data, error } = await supabase.functions.invoke("send-contact-email", { body: parsed.data });
       if (error || (data && (data as any).error)) throw new Error(error?.message || (data as any).error);
       toast.success("Thank you for reaching out. I will get back to you shortly.");
-      setForm({ name: "", email: "", company: "", subject: "", message: "" });
+      setForm({ name: "", email: "", subject: "", message: "" });
     } catch (err: any) {
       toast.error(err.message || "Failed to send message");
     } finally {
@@ -47,29 +46,29 @@ const Contact = () => {
   return (
     <section id="contact" className="section-pad">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <p className="font-mono text-primary text-sm mb-3">// contact.sh</p>
-          <h2 className="text-3xl md:text-5xl font-bold">
-            Let's <span className="gradient-text">Build</span> Together
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Open to senior DevOps / Cloud / Platform / SRE roles and collaborations.
-          </p>
-        </motion.div>
+        {withHeader && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12 max-w-2xl mx-auto"
+          >
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              Get in <span className="gradient-text">Touch</span>
+            </h2>
+            <p className="text-muted-foreground">
+              Open to DevOps, Cloud, and Platform Engineering opportunities.
+            </p>
+          </motion.div>
+        )}
 
         <div className="grid lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
           <div className="lg:col-span-2 space-y-3">
             <ContactItem icon={Mail} label="Email" value="popesurprise@gmail.com" href="mailto:popesurprise@gmail.com" />
-            <ContactItem icon={Phone} label="Phone (NG)" value="+234 903 883 4820" href="tel:+2349038834820" />
-            <ContactItem icon={Phone} label="Phone (US)" value="+1 484 919 9407" href="tel:+14849199407" />
-            <ContactItem icon={Github} label="GitHub" value="github.com/Popesurprise" href="https://github.com/Popesurprise" />
-            <ContactItem icon={Linkedin} label="LinkedIn" value="linkedin.com/in/surprisepopoola" href="https://www.linkedin.com/in/surprisepopoola" />
-            <ContactItem icon={MapPin} label="Location" value="Lagos, Nigeria · Remote" />
+            <ContactItem icon={Linkedin} label="LinkedIn" value="surprisepopoola" href="https://www.linkedin.com/in/surprisepopoola" />
+            <ContactItem icon={Github} label="GitHub" value="Popesurprise" href="https://github.com/Popesurprise" />
+            <ContactItem icon={Phone} label="Phone" value="+1 484 919 9407" href="tel:+14849199407" />
+            <ContactItem icon={MapPin} label="Location" value="Remote · Worldwide" />
           </div>
 
           <motion.form
@@ -83,15 +82,12 @@ const Contact = () => {
               <Field label="Name" id="name" value={form.name} onChange={onChange("name")} required />
               <Field label="Email" id="email" type="email" value={form.email} onChange={onChange("email")} required />
             </div>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <Field label="Company" id="company" value={form.company} onChange={onChange("company")} />
-              <Field label="Subject" id="subject" value={form.subject} onChange={onChange("subject")} required />
-            </div>
+            <Field label="Subject" id="subject" value={form.subject} onChange={onChange("subject")} required />
             <div className="space-y-2">
               <Label htmlFor="message">Message</Label>
               <Textarea id="message" rows={6} value={form.message} onChange={onChange("message")} required maxLength={2000} />
             </div>
-            <Button type="submit" size="lg" disabled={loading} className="w-full font-mono">
+            <Button type="submit" size="lg" disabled={loading} className="w-full">
               {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending…</> : <><Send className="mr-2 h-4 w-4" /> Send Message</>}
             </Button>
           </motion.form>
@@ -101,7 +97,7 @@ const Contact = () => {
   );
 };
 
-const Field = ({ label, id, type = "text", value, onChange, required, }: any) => (
+const Field = ({ label, id, type = "text", value, onChange, required }: any) => (
   <div className="space-y-2">
     <Label htmlFor={id}>{label}{required && <span className="text-primary"> *</span>}</Label>
     <Input id={id} type={type} value={value} onChange={onChange} required={required} />
@@ -110,8 +106,8 @@ const Field = ({ label, id, type = "text", value, onChange, required, }: any) =>
 
 const ContactItem = ({ icon: Icon, label, value, href }: any) => {
   const body = (
-    <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover-lift">
-      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+    <div className="flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors">
+      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
         <Icon className="h-4 w-4 text-primary" />
       </div>
       <div className="min-w-0">
