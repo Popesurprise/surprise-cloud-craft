@@ -25,25 +25,6 @@ const roles = [
       "Built zero-downtime release and database migration workflows.",
     ],
   },
-  {
-    company: "Executive Office",
-    title: "Executive Assistant to CEO",
-    period: "Present",
-    bullets: [
-      "Coordinate executive operations and strategic initiatives.",
-      "Manage schedules, documentation, and organizational workflows.",
-      "Support decision-making through research and operational reporting.",
-    ],
-  },
-  {
-    company: "Perfect Touches Salon & Spa",
-    title: "Administrative Manager",
-    period: "Previous",
-    bullets: [
-      "Managed daily operations and staff coordination.",
-      "Improved workflow efficiency and customer service processes.",
-    ],
-  },
 ];
 
 const Experience = ({ withHeader = true }: { withHeader?: boolean }) => (

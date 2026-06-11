@@ -67,7 +67,7 @@ const Contact = ({ withHeader = true }: { withHeader?: boolean }) => {
             <ContactItem icon={Mail} label="Email" value="popesurprise@gmail.com" href="mailto:popesurprise@gmail.com" />
             <ContactItem icon={Linkedin} label="LinkedIn" value="surprisepopoola" href="https://www.linkedin.com/in/surprisepopoola" />
             <ContactItem icon={Github} label="GitHub" value="Popesurprise" href="https://github.com/Popesurprise" />
-            <ContactItem icon={Phone} label="Phone" value="+1 484 919 9407" href="tel:+14849199407" />
+            <ContactItem icon={Phone} label="Phone" value="+234 9038834820 or +1 484 919 9407" href="tel:+2349038834820" />
             <ContactItem icon={MapPin} label="Location" value="Remote · Worldwide" />
           </div>
 
