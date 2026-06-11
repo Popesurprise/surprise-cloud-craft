@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Download, ArrowRight, Mail } from "lucide-react";
-import surpriseHeadshot from "@/assets/surprise.png";
+import surpriseHeadshot from "@/assets/surprise2.png";
 
 const Hero = () => {
   return (
