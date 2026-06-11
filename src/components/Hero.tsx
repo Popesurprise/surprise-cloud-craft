@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Download, ArrowRight, Mail } from "lucide-react";
-import surpriseHeadshot from "@/assets/d701e07e-5582-4143-8060-bfb5aebcc2c3.png";
+import surpriseHeadshot from "@/assets/surprise-headshot.jpg";
 
 const Hero = () => {
   return (
@@ -23,7 +23,7 @@ const Hero = () => {
               Hi, I'm <span className="gradient-text">Surprise</span>.
             </h1>
             <p className="text-lg md:text-xl text-foreground/90 mb-4 font-medium">
-              DevOps Engineer · Cloud Infrastructure Enthusiast · AWS Solutions Architecture Learner
+              DevOps Engineer · Site Reliability Engineer · Cloud Infrastructure Engineer
             </p>
             <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-8 max-w-2xl">
               I design, automate, and optimize cloud-native infrastructure using modern DevOps

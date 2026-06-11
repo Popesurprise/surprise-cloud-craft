@@ -24,15 +24,18 @@ const About = ({ withHeader = true }: { withHeader?: boolean }) => (
         )}
         <div className="space-y-5 text-muted-foreground text-base md:text-lg leading-relaxed text-left md:text-center">
           <p>
-            I am a passionate technology professional with experience in DevOps engineering,
-            cloud computing, automation, and infrastructure management. My background spans
-            executive support, operations management, and software engineering, giving me a
-            unique ability to bridge business objectives with technical execution.
+            <p>
+            I am a DevOps and Site Reliability Engineer with hands-on experience designing,
+            automating, and managing cloud-native infrastructure at scale. At First Bank PLC,
+            I work across AWS, Kubernetes, Terraform, and GitLab CI to deliver reliable,
+            secure, and observable systems that support critical banking operations.
           </p>
           <p>
-            Currently pursuing a career in Cloud and DevOps Engineering, I enjoy building
-            resilient systems, automating repetitive processes, and implementing modern
-            deployment practices that improve reliability and efficiency.
+            My engineering philosophy centers on eliminating toil, enforcing reliability through
+            SLOs and observability, and treating infrastructure as code. I bring a rare combination
+            of deep technical execution and business awareness — enabling me to build systems that
+            are not just functional, but resilient and aligned with organizational goals.
+          </p>
           </p>
         </div>
       </motion.div>
